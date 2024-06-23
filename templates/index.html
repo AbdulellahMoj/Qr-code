@@ -24,6 +24,8 @@
             height: 100vh;
         }
         .container {
+            font-family: 'Ubuntu', sans-serif;
+
             text-align: center;
             padding: 2rem;
             background-color: #2D1B81;
@@ -38,16 +40,22 @@
             margin-bottom: 1rem;
         }
         h2 {
+            font-family: 'Ubuntu', sans-serif;
+
             font-size: 1.25rem;
             margin-bottom: 1.5rem;
         }
         form {
+            font-family: 'Ubuntu', sans-serif;
+
             display: flex;
             flex-direction: column;
             gap: 1rem;
             align-items: center;
         }
         input[type="text"], select, button {
+            font-family: 'Ubuntu', sans-serif;
+
             font-size: 1rem;
             padding: 0.5rem 1rem;
             border: 2px solid #FFABC7;
@@ -58,26 +66,37 @@
             color: #2D1B81;
         }
         input[name="fill_color"], input[name="back_color"] {
+            font-family: 'Ubuntu', sans-serif;
+
             text-transform: uppercase;
         }
         button {
+            font-family: 'Ubuntu', sans-serif;
+
             background-color: #FFABC7;
             color: #2D1B81;
             cursor: pointer;
         }
         .color-inputs {
+            font-family: 'Ubuntu', sans-serif;
+
             display: flex;
             gap: 0.5rem;
             align-items: center;
         }
         .generated {
+            font-family: 'Ubuntu', sans-serif;
+
             margin-top: 2rem;
         }
         .generated img {
+
             max-width: 100%;
             height: auto;
         }
         .download-button {
+            font-family: 'Ubuntu', sans-serif;
+
             display: inline-block;
             margin-top: 1rem;
             padding: 0.5rem 1rem;
@@ -98,7 +117,7 @@
         <form action="/generate" method="POST">
             <input type="text" name="link" placeholder="Enter link" required />
             <div class="color-inputs">
-                <input type="text" name="fill_color" placeholder="Fill Color (e.g., #DBEE49)" required />
+                <input type="text" name="fill_color" placeholder="Fill Color (e.g., #DBEE49)" value="#DBEE49" required />
                 <select onchange="this.previousElementSibling.value=this.value">
                     <option value="#DBEE49">Default Fill Color</option>
                     <option value="#000000">Black</option>
@@ -107,7 +126,7 @@
                 </select>
             </div>
             <div class="color-inputs">
-                <input type="text" name="back_color" placeholder="Background Color (e.g., #2D1B81)" required />
+                <input type="text" name="back_color" placeholder="Background Color (e.g., #2D1B81)" value="#2D1B81" required />
                 <select onchange="this.previousElementSibling.value=this.value">
                     <option value="#2D1B81">Default Background Color</option>
                     <option value="#000000">Black</option>
