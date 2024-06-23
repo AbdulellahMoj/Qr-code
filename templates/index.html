@@ -7,21 +7,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Blaka&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>QR Code</title>
+    <title>QR Code Generator</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        html, body {
-            margin: 0;
-            padding: 0;
+        body {
             font-family: 'Ubuntu', sans-serif;
             background-color: #2D1B81;
             color: #DBEE49;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
@@ -33,17 +30,16 @@
             border: 2px solid #DBEE49;
             border-radius: 20px;
             width: 80%;
-            max-width: 600px;
+            max-width: 500px;
         }
         h1 {
             font-family: 'Blaka', cursive;
-            font-size: 3rem;
+            font-size: 2.5rem;
             margin-bottom: 1rem;
         }
         h2 {
-            font-family: 'Ubuntu', sans-serif;
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
         }
         form {
             display: flex;
@@ -51,19 +47,28 @@
             gap: 1rem;
             align-items: center;
         }
-        input, select, button {
-            font-family: 'Ubuntu', sans-serif;
+        input[type="text"], select, button {
             font-size: 1rem;
             padding: 0.5rem 1rem;
             border: 2px solid #FFABC7;
             border-radius: 10px;
             width: 100%;
             max-width: 300px;
+            background-color: #FFABC7;
+            color: #2D1B81;
+        }
+        input[name="fill_color"], input[name="back_color"] {
+            text-transform: uppercase;
         }
         button {
             background-color: #FFABC7;
             color: #2D1B81;
             cursor: pointer;
+        }
+        .color-inputs {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
         }
         .generated {
             margin-top: 2rem;
@@ -73,6 +78,7 @@
             height: auto;
         }
         .download-button {
+            display: inline-block;
             margin-top: 1rem;
             padding: 0.5rem 1rem;
             background-color: #FFABC7;
@@ -81,7 +87,6 @@
             border-radius: 10px;
             cursor: pointer;
             text-decoration: none;
-            font-family: 'Ubuntu', sans-serif;
             font-size: 1rem;
         }
     </style>
@@ -92,21 +97,28 @@
         <h2>Insert a link below to generate a QR Code</h2>
         <form action="/generate" method="POST">
             <input type="text" name="link" placeholder="Enter link" required />
-            <div>
-                <label for="fill_color">Fill Color:</label>
-                <input type="color" name="fill_color" value="#000000" required />
-            </div>
-            <div>
-                <label for="back_color">Background Color:</label>
-                <input type="color" name="back_color" value="#FFFFFF" required />
-            </div>
-            <div>
-                <label for="format">Format:</label>
-                <select name="format" required>
-                    <option value="png">PNG</option>
-                    <option value="svg">SVG</option>
+            <div class="color-inputs">
+                <input type="text" name="fill_color" placeholder="Fill Color (e.g., #DBEE49)" required />
+                <select onchange="this.previousElementSibling.value=this.value">
+                    <option value="#DBEE49">Default Fill Color</option>
+                    <option value="#000000">Black</option>
+                    <option value="#FFFFFF">White</option>
+                    <option value="#FF0000">Red</option>
                 </select>
             </div>
+            <div class="color-inputs">
+                <input type="text" name="back_color" placeholder="Background Color (e.g., #2D1B81)" required />
+                <select onchange="this.previousElementSibling.value=this.value">
+                    <option value="#2D1B81">Default Background Color</option>
+                    <option value="#000000">Black</option>
+                    <option value="#FFFFFF">White</option>
+                    <option value="#FF0000">Red</option>
+                </select>
+            </div>
+            <select name="format" required>
+                <option value="png">PNG</option>
+                <option value="svg">SVG</option>
+            </select>
             <button type="submit">Generate</button>
         </form>
         <div class="generated">
