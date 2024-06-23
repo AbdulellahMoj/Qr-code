@@ -13,10 +13,10 @@ def save_qr_code(data, file_format='png', file='qr_code'):
 
     qr.add_data(data)
     qr.make(fit=True)
-
+#not working ""need to fix""@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     if file_format.lower() == 'svg':
         file_name=f"{file}.svg"
-        img = qr.make_image(fill_color="#DBEE49", back_color="#2D1B81")
+        img = qr.make_image()
         img.save(file_name)
         
     elif file_format.lower() == 'png':
@@ -33,7 +33,7 @@ def save_qr_code(data, file_format='png', file='qr_code'):
 #edit the data variable to generate a QR code for your URL
 #edit the fileName variable to name your QR code file
 data = "https://satr.codes/"
-fileName = "qr_code"
+fileName = "qr_code33"
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 file_format_question = [
     inquirer.List('file_format',
