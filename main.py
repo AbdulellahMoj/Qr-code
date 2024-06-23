@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, send_file
 import qrcode
+import qrcode.image.svg
 from io import BytesIO
 from base64 import b64encode
 import os
@@ -13,8 +14,10 @@ def home():
 @app.route('/generate', methods=['POST'])
 def genQrCode():
     data = request.form.get('link')
+    format = request.form.get('format')
+    fill_color = request.form.get('fill_color')
+    back_color = request.form.get('back_color')
 
-    # Create a QR code with custom colors
     qr = qrcode.QRCode(
         version=3,
         box_size=20,
@@ -23,26 +26,34 @@ def genQrCode():
     )
     qr.add_data(data)
     qr.make(fit=True)
-    img = qr.make_image(fill_color="#DBEE49", back_color="#2D1B81")
 
-    # Save image to a bytes buffer
+    if format == 'svg':
+        img = qr.make_image(image_factory=qrcode.image.svg.SvgImage, fill_color=fill_color, back_color=back_color)
+        ext = 'svg'
+        mime = 'image/svg+xml'
+    else:
+        img = qr.make_image(fill_color=fill_color, back_color=back_color)
+        ext = 'png'
+        mime = 'image/png'
+
     memo = BytesIO()
     img.save(memo)
     memo.seek(0)
-    base64_img = "data:image/png;base64," + b64encode(memo.getvalue()).decode('ascii')
+    base64_img = f"data:{mime};base64," + b64encode(memo.getvalue()).decode('ascii')
 
-    # Ensure the static directory exists
     if not os.path.exists('static'):
         os.makedirs('static')
 
-    # Save the QR code image to a static folder for download
-    img.save('static/qr_code.png')
+    file_path = f'static/qr_code.{ext}'
+    with open(file_path, 'wb') as f:
+        f.write(memo.getvalue())
 
-    return render_template('index.html', qr_code=base64_img)
+    return render_template('index.html', qr_code=base64_img, file_path=file_path)
 
 @app.route('/download')
 def download():
-    return send_file('static/qr_code.png', as_attachment=True)
+    file_path = request.args.get('file_path')
+    return send_file(file_path, as_attachment=True)
 
 if __name__ == '__main__':
     app.run(debug=True)
