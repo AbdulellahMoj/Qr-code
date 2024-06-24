@@ -11,4 +11,4 @@ qr.make(fit=True)
 img = qr.make_image(fill_color="#DBEE49", back_color="#2D1B81")
 
 img.save("qr_code.png")
-print("QR code saved as qr_code.png")
+print("QR code saved as qr_code.png") 
