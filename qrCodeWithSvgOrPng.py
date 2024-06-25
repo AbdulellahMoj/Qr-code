@@ -32,8 +32,8 @@ def save_qr_code(data, file_format='png', file='qr_code'):
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #edit the data variable to generate a QR code for your URL
 #edit the fileName variable to name your QR code file
-data = "https://satr.codes/"
-fileName = "qr_code33"
+data = "url_here"
+fileName = "qr_code"
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 file_format_question = [
     inquirer.List('file_format',
