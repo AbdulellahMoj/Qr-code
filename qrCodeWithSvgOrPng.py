@@ -5,9 +5,9 @@ from xml.etree import ElementTree as ET
 
 def save_qr_code(data, file_format='png', file='qr_code'):
     qr = qrcode.QRCode(
-        version=3,
+        version=5,
         box_size=20,
-        border=10,
+        border=1,
         error_correction=qrcode.constants.ERROR_CORRECT_H
     )
 
@@ -32,8 +32,8 @@ def save_qr_code(data, file_format='png', file='qr_code'):
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #edit the data variable to generate a QR code for your URL
 #edit the fileName variable to name your QR code file
-data = "url_here"
-fileName = "qr_code"
+data = "https://satr.codes/"
+fileName = "qr_codeSATR"
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 file_format_question = [
     inquirer.List('file_format',
