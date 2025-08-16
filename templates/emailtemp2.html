@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= title ?></title>
+    <style>
+        body {
+            background-color: #2D1B81;
+            color: #DBEE49;
+            font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+            padding: 20px;
+            text-align: center;
+        }
+        h1, h4 {
+            color: #DBEE49;
+        }
+        .divider {
+            border-bottom: 2px solid #DBEE49;
+            margin: 20px 0;
+        }
+        .button {
+            background-color: #DBEE49;
+            color: #2D1B81;
+            padding: 10px 20px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 20px 0;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <img src="<?= email_header ?>" alt="Main Image">
+    <h1><?= title ?></h1>
+    <div class="divider"></div>
+    <h4><?= subtitle ?></h4>
+    <p><?= name ?></p>
+
+    <p><?= body_line1 ?></p>
+    <a href="<?= link ?>" class="button" style="display: <?= hide_button ?>">Group chat</a>
+    <div class="divider"></div>
+    <img src="<?= email_footer ?>" alt="Footer Logo">
+</body>
+</html>

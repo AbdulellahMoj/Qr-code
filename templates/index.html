@@ -1,152 +1,212 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Blaka&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700&display=swap" rel="stylesheet">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>QR Code Generator</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Ubuntu', sans-serif;
-            background-color: #2D1B81;
-            color: #DBEE49;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-        .container {
-            font-family: 'Ubuntu', sans-serif;
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Github, Twitter } from "lucide-react";
 
-            text-align: center;
-            padding: 2rem;
-            background-color: #2D1B81;
-            border: 2px solid #DBEE49;
-            border-radius: 20px;
-            width: 80%;
-            max-width: 500px;
-        }
-        h1 {
-            font-family: 'Blaka', cursive;
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-        h2 {
-            font-family: 'Ubuntu', sans-serif;
+export default function QRCodeUI() {
+  const [url, setUrl] = useState("");
+  const [fillColor, setFillColor] = useState("#9aa9ff");
+  const [backColor, setBackColor] = useState("#16162a");
+  const [format, setFormat] = useState("png");
+  const [qrCode, setQrCode] = useState("");
 
-            font-size: 1.25rem;
-            margin-bottom: 1.5rem;
-        }
-        form {
-            font-family: 'Ubuntu', sans-serif;
+  const generateQR = () => {
+    if (url.trim() !== "") {
+      // Remove # from colors for the API
+      const fillColorClean = fillColor.replace('#', '');
+      const backColorClean = backColor.replace('#', '');
+      
+      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&color=${fillColorClean}&bgcolor=${backColorClean}&data=${encodeURIComponent(url)}&format=${format}`;
+      setQrCode(qrApiUrl);
+    }
+  };
 
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            align-items: center;
-        }
-        input[type="text"], select, button {
-            font-family: 'Ubuntu', sans-serif;
+  const downloadQR = () => {
+    if (qrCode) {
+      const link = document.createElement('a');
+      link.href = qrCode;
+      link.download = `qrcode.${format}`;
+      link.click();
+    }
+  };
 
-            font-size: 1rem;
-            padding: 0.5rem 1rem;
-            border: 2px solid #FFABC7;
-            border-radius: 10px;
-            width: 100%;
-            max-width: 300px;
-            background-color: #FFABC7;
-            color: #2D1B81;
-        }
-        input[name="fill_color"], input[name="back_color"] {
-            font-family: 'Ubuntu', sans-serif;
+  return (
+    <div className="min-h-screen text-white flex flex-col items-center justify-center p-6 relative overflow-hidden"
+         style={{
+           background: '#1a1a2e',
+           backgroundImage: `linear-gradient(#1f1f3a 1px, transparent 1px), linear-gradient(90deg, #1f1f3a 1px, transparent 1px)`,
+           backgroundSize: "40px 40px"
+         }}>
 
-            text-transform: uppercase;
-        }
-        button {
-            font-family: 'Ubuntu', sans-serif;
+      <h1
+        className="text-4xl font-bold mb-4"
+        style={{ color: '#9aa9ff' }}
+      >
+        Generate Your QR Code
+      </h1>
 
-            background-color: #FFABC7;
-            color: #2D1B81;
-            cursor: pointer;
-        }
-        .color-inputs {
-            font-family: 'Ubuntu', sans-serif;
+      <Card className="w-full max-w-lg rounded-2xl shadow-xl backdrop-blur-lg"
+            style={{ 
+              backgroundColor: '#202040',
+              borderColor: '#1f1f3a',
+              boxShadow: '0 8px 20px rgba(0,0,0,0.6)'
+            }}>
+        <CardContent className="p-8 pt-6 flex flex-col items-center space-y-3">
+          <Input
+            placeholder="Enter URL here..."
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && generateQR()}
+            className="w-full rounded-xl text-white placeholder:text-gray-400"
+            style={{
+              backgroundColor: '#16162a',
+              borderColor: '#1f1f3a',
+              color: '#e0e0e0'
+            }}
+          />
 
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-        }
-        .generated {
-            font-family: 'Ubuntu', sans-serif;
+          <div className="w-48 h-48 border rounded-2xl flex items-center justify-center"
+               style={{
+                 backgroundColor: '#16162a',
+                 borderColor: '#1f1f3a'
+               }}>
+            {qrCode ? (
+              <img 
+                src={qrCode} 
+                alt="Generated QR Code" 
+                className="w-full h-full object-contain rounded-2xl"
+              />
+            ) : (
+              <span style={{ color: '#9aa9ff' }}>QR Preview</span>
+            )}
+          </div>
 
-            margin-top: 2rem;
-        }
-        .generated img {
+          <Button 
+            onClick={generateQR}
+            className="w-full rounded-xl text-white font-semibold transition-all duration-300 hover:opacity-90"
+            style={{
+              backgroundColor: '#3a4fff',
+            }}
+          >
+            Generate QR Code
+          </Button>
 
-            max-width: 100%;
-            height: auto;
-        }
-        .download-button {
-            font-family: 'Ubuntu', sans-serif;
-
-            display: inline-block;
-            margin-top: 1rem;
-            padding: 0.5rem 1rem;
-            background-color: #FFABC7;
-            color: #2D1B81;
-            border: 2px solid #FFABC7;
-            border-radius: 10px;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 1rem;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>QR Code Generator</h1>
-        <h2>Insert a link below to generate a QR Code</h2>
-        <form action="/generate" method="POST">
-            <input type="text" name="link" placeholder="Enter link" required />
-            <div class="color-inputs">
-                <input type="text" name="fill_color" placeholder="Fill Color (e.g., #DBEE49)" value="#DBEE49" required />
-                <select onchange="this.previousElementSibling.value=this.value">
-                    <option value="#DBEE49">Default Fill Color</option>
-                    <option value="#000000">Black</option>
-                    <option value="#FFFFFF">White</option>
-                    <option value="#FF0000">Red</option>
-                </select>
+          {/* Color Controls */}
+          <div className="w-full space-y-2">
+            <div className="flex gap-2">
+              <Input
+                type="text"
+                placeholder="Fill Color"
+                value={fillColor}
+                onChange={(e) => setFillColor(e.target.value)}
+                className="flex-1 rounded-xl text-white placeholder:text-gray-400"
+                style={{
+                  backgroundColor: '#16162a',
+                  borderColor: '#1f1f3a',
+                  color: '#e0e0e0'
+                }}
+              />
+              <select 
+                value={fillColor}
+                onChange={(e) => setFillColor(e.target.value)}
+                className="rounded-xl px-3 py-2"
+                style={{
+                  backgroundColor: '#16162a',
+                  borderColor: '#1f1f3a',
+                  color: '#e0e0e0',
+                  border: '1px solid #1f1f3a'
+                }}
+              >
+                <option value="#9aa9ff">Blue</option>
+                <option value="#000000">Black</option>
+                <option value="#ffffff">White</option>
+                <option value="#ff4ec5">Pink</option>
+                <option value="#9d4edd">Purple</option>
+              </select>
             </div>
-            <div class="color-inputs">
-                <input type="text" name="back_color" placeholder="Background Color (e.g., #2D1B81)" value="#2D1B81" required />
-                <select onchange="this.previousElementSibling.value=this.value">
-                    <option value="#2D1B81">Default Background Color</option>
-                    <option value="#000000">Black</option>
-                    <option value="#FFFFFF">White</option>
-                    <option value="#FF0000">Red</option>
-                </select>
+
+            <div className="flex gap-2">
+              <Input
+                type="text"
+                placeholder="Background Color"
+                value={backColor}
+                onChange={(e) => setBackColor(e.target.value)}
+                className="flex-1 rounded-xl text-white placeholder:text-gray-400"
+                style={{
+                  backgroundColor: '#16162a',
+                  borderColor: '#1f1f3a',
+                  color: '#e0e0e0'
+                }}
+              />
+              <select 
+                value={backColor}
+                onChange={(e) => setBackColor(e.target.value)}
+                className="rounded-xl px-3 py-2"
+                style={{
+                  backgroundColor: '#16162a',
+                  borderColor: '#1f1f3a',
+                  color: '#e0e0e0',
+                  border: '1px solid #1f1f3a'
+                }}
+              >
+                <option value="#16162a">Dark</option>
+                <option value="#000000">Black</option>
+                <option value="#ffffff">White</option>
+                <option value="#1a1a1a">Charcoal</option>
+              </select>
             </div>
-            <select name="format" required>
-                <option value="png">PNG</option>
-                <option value="svg">SVG</option>
+
+            <select 
+              value={format}
+              onChange={(e) => setFormat(e.target.value)}
+              className="w-full rounded-xl px-3 py-2"
+              style={{
+                backgroundColor: '#16162a',
+                borderColor: '#1f1f3a',
+                color: '#e0e0e0',
+                border: '1px solid #1f1f3a'
+              }}
+            >
+              <option value="png">PNG</option>
+              <option value="svg">SVG</option>
             </select>
-            <button type="submit">Generate</button>
-        </form>
-        <div class="generated">
-            {% if qr_code %}
-            <img src="{{ qr_code }}" alt="QR Code">
-            <p>Here's your QR Code</p>
-            <a href="/download?file_path={{ file_path }}" class="download-button">Download</a>
-            {% endif %}
-        </div>
+          </div>
+
+          {qrCode && (
+            <Button 
+              onClick={downloadQR}
+              variant="outline"
+              className="w-full rounded-xl font-semibold transition-all duration-300"
+              style={{
+                borderColor: '#9aa9ff',
+                color: '#9aa9ff',
+                backgroundColor: 'transparent'
+              }}
+            >
+              Download QR Code
+            </Button>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Footer */}
+      <div className="flex space-x-6 mt-8">
+        <a href="https://github.com/AbdulellahMoj" 
+           target="_blank" 
+           rel="noopener noreferrer" 
+           className="transition-colors duration-300 hover:text-white"
+           style={{ color: '#9aa9ff' }}>
+          <Github className="w-6 h-6" />
+        </a>
+        <a href="https://x.com/abdulellahmoj" 
+           target="_blank" 
+           rel="noopener noreferrer" 
+           className="transition-colors duration-300 hover:text-white"
+           style={{ color: '#9aa9ff' }}>
+          <Twitter className="w-6 h-6" />
+        </a>
+      </div>
     </div>
-</body>
-</html>
+  );
+}
